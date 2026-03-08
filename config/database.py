@@ -34,7 +34,7 @@ class Database:
     def cerrar(self):
         if self.conexion and not self.conexion.closed:
             self.conexion.close()
-
+            
 MAIL_CONFIG = {
     'MAIL_SERVER': 'smtp.gmail.com',
     'MAIL_PORT': 587,
