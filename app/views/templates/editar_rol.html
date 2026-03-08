@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block titulo %}Editar Rol — {{ usuario.nombre }}{% endblock %}
+
+{% block contenido %}
+<div class="card" style="max-width:480px; margin:0 auto;">
+    <h1> Editar Rol de Usuario</h1>
+
+    <div style="background:#f7f9fc; border-radius:8px; padding:14px 18px; margin-bottom:22px; font-size:.92rem; color:#4a5568;">
+        <strong>Usuario:</strong> {{ usuario.nombre }}<br>
+        <strong>Correo:</strong> {{ usuario.correo }}<br>
+        <strong>Rol actual:</strong>
+        <span class="badge badge-{{ usuario.rol }}">{{ usuario.rol | capitalize }}</span>
+    </div>
+
+    {% if errores %}
+    <div class="alert alert-error">
+        {% for e in errores %}<p>{{ e }}</p>{% endfor %}
+    </div>
+    {% endif %}
+
+    {% if exito %}
+    <div class="alert alert-success"> Rol actualizado correctamente.</div>
+    {% endif %}
+
+    <form method="POST" action="/usuarios/{{ usuario.id }}/editar-rol">
+        <div class="form-group">
+            <label for="rol">Nuevo Rol</label>
+            <select id="rol" name="rol_id" required>
+                <option value="">— Seleccione un rol —</option>
+                {% for rol in roles %}
+                <option value="{{ rol.id }}"
+                    {% if usuario.rol_id == rol.id %}selected{% endif %}>
+                    {{ rol.nombre | capitalize }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:8px;">
+            <button type="submit" class="btn btn-primary">Guardar cambio</button>
+            <a href="/" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

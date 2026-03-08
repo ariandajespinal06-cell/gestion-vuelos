@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block titulo %}Usuarios — Gestión de Vuelos{% endblock %}
+
+{% block contenido %}
+<div class="page-header">
+    <h1> Usuarios del Sistema</h1>
+    {% if session.rol == 'admin' %}
+    <a href="/usuarios/crear" class="btn btn-primary"> Nuevo Usuario</a>
+    {% endif %}
+</div>
+
+{% if usuarios %}
+<div class="card" style="padding:0; overflow:hidden;">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Fecha de Registro</th>
+                {% if session.rol == 'admin' %}
+                <th>Acciones</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in usuarios %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.nombre }}</td>
+                <td>{{ u.correo }}</td>
+                <td><span class="badge badge-{{ u.rol }}">{{ u.rol | capitalize }}</span></td>
+                <td>
+                    {% if u.estado %}
+                        <span class="badge badge-activo">Activo</span>
+                    {% else %}
+                        <span class="badge badge-inactivo">Inactivo</span>
+                    {% endif %}
+                </td>
+                <td>{{ u.fecha_creacion.strftime('%d/%m/%Y') if u.fecha_creacion else '—' }}</td>
+                {% if session.rol == 'admin' %}
+                <td>
+                    <a href="/usuarios/{{ u.id }}/editar-rol" class="btn btn-secondary btn-sm">Editar Rol</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card" style="text-align:center; padding:48px;">
+    <p style="font-size:1.1rem;"> No hay usuarios registrados aún.</p>
+    <a href="/usuarios/crear" class="btn btn-primary" style="margin-top:18px;">Registrar el primero</a>
+</div>
+{% endif %}
+{% endblock %}
